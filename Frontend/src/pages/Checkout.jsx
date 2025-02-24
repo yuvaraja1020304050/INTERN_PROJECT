@@ -15,18 +15,24 @@ const Checkout = ({ selectedPlan }) => {
     setError(null);
 
     try {
+      // Send the selected plan and phone number to your backend to create the checkout session
       const response = await fetch("http://localhost:5000/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: selectedPlan }),
+        body: JSON.stringify({
+          plan: selectedPlan,  // You may want to send the full plan object
+          phone: "79"  // This should be dynamically set based on the user
+        }),
       });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Something went wrong");
 
+      // Redirect the user to Stripe's checkout page
       const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
       if (error) setError(error.message);
-      else navigate("/premium-dashboard"); 
+      else navigate("/premium-dashboard"); // Redirect to the premium dashboard after checkout
+
     } catch (err) {
       setError(err.message);
     } finally {

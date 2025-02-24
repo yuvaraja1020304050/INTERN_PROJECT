@@ -11,8 +11,10 @@ const Subscription = ({ setSelectedPlan }) => {
   ];
 
   const handleActivate = (plan) => {
+    // Assuming phone number is available somehow (maybe from user input)
+    const userPhone = "1234567890"; // For example purposes
     setSelectedPlan(plan);
-    navigate("/checkout");
+    navigate("/checkout", { state: { phone: userPhone } }); // Pass phone in state
   };
 
   return (
